@@ -1,0 +1,28 @@
+library(dplyr)
+library(lubridate)
+
+##setwd("Data Science Specialization/Exploratory Data Analysis")
+##DF <- read.csv("household_power_consumption.txt", sep = ";", colClasses = rep("character",9))
+DF1 <- filter(DF, Date %in% c("1/2/2007" ,"2/2/2007" ))
+DF1 <- mutate(DF1, Date = dmy(Date), Time = hms(Time), DateTime = Date + Time)
+Sub_metering_1<-as.numeric(DF1$Sub_metering_1) 
+Sub_metering_2<-as.numeric(DF1$Sub_metering_2)
+Sub_metering_3<-as.numeric(DF1$Sub_metering_3)
+Voltage <- as.numeric(DF1$Voltage)
+Global_active_power<-as.numeric(DF1$Global_active_power)
+Global_reactive_power<-as.numeric(DF1$Global_reactive_power)
+
+x <- DF1$DateTime
+png("./plot4.png", width = 480, height = 480)
+par(mfrow = c(2,2))
+plot(x,Global_active_power, type = "l", main="", xlab= "", ylab = "Global Active Power",cex.lab=0.7, cex.axis=0.7, cex.main=0.7, cex.sub=0.7)
+title(cex.lab=0.75)
+plot(x,Voltage, type = "l", main="", xlab= "Datetime", ylab = "Voltage",cex.lab=0.7, cex.axis=0.7, cex.main=0.7, cex.sub=0.7)
+
+plot(x,Sub_metering_1, type = "l", main="", xlab= "", ylab = "Energy Sub Metering", col =1,cex.lab=0.7, cex.axis=0.7, cex.main=0.7, cex.sub=0.7)
+lines(x,DF1$Sub_metering_2,col ="blue")
+lines(x,Sub_metering_3,col ="red")
+legend("topright", legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), lty = 1,col=c(1,"blue","red"),cex=0.7, bty ="n")
+plot(x,Global_reactive_power, type = "l", main="", xlab= "Datetime", ylab = "Global_reactive_power",cex.lab=0.7, cex.axis=0.7, cex.main=0.7, cex.sub=0.7)
+##dev.copy(device=png,file = "Plot4.png")
+dev.off()

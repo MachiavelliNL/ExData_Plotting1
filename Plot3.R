@@ -1,0 +1,18 @@
+library(dplyr)
+library(lubridate)
+
+##setwd("Data Science Specialization/Exploratory Data Analysis")
+##DF <- read.csv("household_power_consumption.txt", sep = ";", colClasses = rep("character",9))
+DF1 <- filter(DF, Date %in% c("1/2/2007" ,"2/2/2007" ))
+DF1 <- mutate(DF1, Date = dmy(Date), Time = hms(Time), DateTime = Date + Time)
+Sub_metering_1<-as.numeric(DF1$Sub_metering_1) 
+Sub_metering_2<-as.numeric(DF1$Sub_metering_2)
+Sub_metering_3<-as.numeric(DF1$Sub_metering_3)
+x <- DF1$DateTime
+png("./plot3.png", width = 480, height = 480)
+plot(x,Sub_metering_1, type = "l", main="", xlab= "", ylab = "Energy Sub Metering", col =1)
+lines(x,DF1$Sub_metering_2,col ="blue")
+lines(x,Sub_metering_3,col ="red")
+legend("topright", legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), lty = 1,col=c(1,"blue","red"))
+##dev.copy(device=png,file = "Plot3.png")
+dev.off()
